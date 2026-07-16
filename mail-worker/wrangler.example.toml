@@ -1,0 +1,40 @@
+# Example production config template.
+# Copy to wrangler.local.toml (gitignored) and fill real values.
+# Do NOT commit the filled file.
+
+name = "cloud-mail"
+main = "src/index.js"
+compatibility_date = "2025-06-04"
+compatibility_flags = ["nodejs_compat"]
+keep_vars = true
+
+[observability]
+enabled = true
+
+[[d1_databases]]
+binding = "db"
+database_name = "cloud-mail-db"
+database_id = "YOUR_D1_DATABASE_ID"
+
+[[kv_namespaces]]
+binding = "kv"
+id = "YOUR_KV_NAMESPACE_ID"
+
+[[r2_buckets]]
+binding = "r2"
+bucket_name = "YOUR_R2_BUCKET_NAME"
+
+[assets]
+binding = "assets"
+directory = "./dist"
+not_found_handling = "single-page-application"
+run_worker_first = true
+
+[triggers]
+crons = ["0 16 * * *"]
+
+[vars]
+orm_log = false
+domain = ["example.com"]
+admin = "admin@example.com"
+jwt_secret = "CHANGE_ME_TO_A_LONG_RANDOM_STRING"
