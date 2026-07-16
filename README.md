@@ -1,10 +1,7 @@
 <p align="center">
     <img src="doc/demo/logo.png" width="80px" />
     <h1 align="center">Cloud Mail</h1>
-    <p align="center">Cloudflare Workers email service — native CF Email Service + External API + D1 backup + AI Email Agent</p>
-    <p align="center">
-        简体中文 | <a href="/README-en.md">English</a>
-    </p>
+    <p align="center">Cloudflare Workers email service - native CF Email Service + External API + D1 backup + AI Email Agent</p>
     <p align="center">
         <a href="/LICENSE">
             <img src="https://img.shields.io/badge/license-MIT-green" />
@@ -12,19 +9,19 @@
     </p>
 </p>
 
-## 功能亮点
+## Highlights
 
-### 1. Cloudflare Email Service 集成
+### 1. Cloudflare Email Service
 
-使用 Cloudflare 原生 `send_email` Workers binding 发送邮件，可搭配 Resend 作为备选。
+Uses the native `send_email` Workers binding for outbound email, with optional Resend fallback.
 
-- **CF 优先模式**（默认）：先通过 Cloudflare Email Service 发送，失败自动回退 Resend
-- **仅 Resend 模式**
-- **仅 CF 模式**
+- **CF First** (default)
+- **Resend Only**
+- **CF Only**
 
 ### 2. External API
 
-允许其他应用通过 HTTP API 发送邮件和查询状态。
+Send email and query status from other apps via HTTP API.
 
 ```bash
 curl -X POST "https://your-domain.com/api/external/send" \
@@ -38,40 +35,40 @@ curl -X POST "https://your-domain.com/api/external/send" \
   }'
 ```
 
-详细文档：[External API Guide](docs/external-api-guide.md)
+Full docs: [External API Guide](docs/external-api-guide.md)
 
-### 3. 邮件删除 + R2 附件清理
+### 3. Delete + Attachment Cleanup
 
-- 软删除 / 永久删除（含 R2/S3/KV 附件）
-- External API 批量删除
+- Soft delete / permanent delete (including R2/S3/KV attachments)
+- Batch delete via External API
 
 ### 4. AI Email Agent
 
-- Workers AI 对话式邮件助手
-- 自动起草回信（仅草稿，不会自动发送）
-- 发送/删除需二次确认
+- Conversational email assistant on Workers AI
+- Auto-draft replies (drafts only, never auto-send)
+- Send/delete require confirmation
 
-### 5. 其他
+### 5. More
 
-- 多域名 / 多用户 / RBAC
-- 附件（R2/S3/KV）
-- Telegram 推送 / Turnstile
-- 暗色模式 / 多语言（中/英/印尼）
-- 响应式 Web UI（Vue 3 + Element Plus）
+- Multi-domain / multi-user / RBAC
+- Attachments (R2/S3/KV)
+- Telegram push / Turnstile
+- Dark mode / i18n (EN/ZH/ID)
+- Responsive Web UI (Vue 3 + Element Plus)
 
 ---
 
-## 快速开始
+## Quick Start
 
-### 环境要求
+### Prerequisites
 
-- Cloudflare 账号
+- Cloudflare account
 - Node.js 16.17+
-- pnpm 8+（推荐）
-- `jq`、`python3`、`openssl`、`curl`
-- 域名已添加到 Cloudflare DNS
+- pnpm 8+ (recommended)
+- `jq`, `python3`, `openssl`, `curl`
+- Domain added to Cloudflare DNS
 
-### 一键部署（推荐）
+### One-Click Deploy (Recommended)
 
 ```bash
 git clone https://github.com/wildanoel/Cloud-Mail.git
@@ -79,55 +76,55 @@ cd Cloud-Mail
 bash scripts/deploy.sh
 ```
 
-脚本会自动完成：
+The script handles:
 
-- 检查 wrangler 登录状态
-- 幂等创建 D1 / KV / R2
-- 生成 JWT secret
-- 可选启用 AI Email Agent
-- 写入 `wrangler.toml` bindings + vars
-- `wrangler deploy`（自动构建前端）
-- 调用 `/api/init/<jwt_secret>` 初始化 schema
+- Wrangler login check
+- Idempotent D1 / KV / R2 creation
+- JWT secret generation
+- Optional AI Email Agent enablement
+- `wrangler.toml` patching
+- `wrangler deploy` (auto-builds Vue frontend)
+- Schema init via `/api/init/<jwt_secret>`
 
-**子命令：**
+**Subcommands:**
 
 ```bash
-bash scripts/deploy.sh                  # 交互式首次部署
-bash scripts/deploy.sh --with-ai        # 自动启用 AI Email Agent
-bash scripts/deploy.sh --no-ai          # 禁用 AI Email Agent
-bash scripts/deploy.sh --redeploy       # 仅重建+部署
-bash scripts/deploy.sh --reset          # 清除本地状态文件
-bash scripts/deploy.sh --destroy        # 删除 Worker + D1 + KV + R2（不可恢复）
+bash scripts/deploy.sh                  # interactive first-time deploy
+bash scripts/deploy.sh --with-ai        # enable AI Email Agent
+bash scripts/deploy.sh --no-ai          # disable AI Email Agent
+bash scripts/deploy.sh --redeploy       # rebuild + ship only
+bash scripts/deploy.sh --reset          # clear local state file
+bash scripts/deploy.sh --destroy        # tear down Worker + D1 + KV + R2
 ```
 
-### 手动部署
+### Manual Deploy
 
-1. 克隆仓库
-2. 创建 D1 / KV / R2
-3. 配置 `wrangler.toml`（可参考 `wrangler.example.toml`）
+1. Clone the repo
+2. Create D1 / KV / R2
+3. Configure `wrangler.toml` (see `wrangler.example.toml`)
 4. `cd mail-worker && wrangler deploy`
-5. 访问 `/api/init/<jwt_secret>`
-6. 用 `admin` 配置中的邮箱注册管理员
+5. Visit `/api/init/<jwt_secret>`
+6. Register the admin account using the email in your `admin` config
 
-更多安全说明见 [SECURITY.md](SECURITY.md) 和 [PUBLISH.md](PUBLISH.md)。
+See [SECURITY.md](SECURITY.md) and [PUBLISH.md](PUBLISH.md) for publish/security notes.
 
 ---
 
-## 技术栈
+## Stack
 
-| 组件 | 技术 |
-|------|------|
-| 运行环境 | Cloudflare Workers |
-| 后端框架 | Hono.js |
-| 数据库 | Cloudflare D1 (SQLite) + Drizzle ORM |
-| 缓存 | Cloudflare KV |
-| 文件存储 | Cloudflare R2 |
-| 发件 | Cloudflare Email Service + Resend |
-| 收件 | Cloudflare Email Routing |
-| 前端 | Vue 3 + Element Plus + Vite |
+| Component | Tech |
+|-----------|------|
+| Runtime | Cloudflare Workers |
+| Backend | Hono.js |
+| Database | Cloudflare D1 (SQLite) + Drizzle ORM |
+| Cache | Cloudflare KV |
+| Files | Cloudflare R2 |
+| Send | Cloudflare Email Service + Resend |
+| Receive | Cloudflare Email Routing |
+| Frontend | Vue 3 + Element Plus + Vite |
 
 ---
 
 ## License
 
-MIT. 详见 [LICENSE](LICENSE)。
+MIT. See [LICENSE](LICENSE).

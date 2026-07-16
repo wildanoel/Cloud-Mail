@@ -1,10 +1,7 @@
 <p align="center">
     <img src="doc/demo/logo.png" width="80px" />
     <h1 align="center">Cloud Mail</h1>
-    <p align="center">Cloudflare Workers email service — native CF Email Service + External API + D1 backup + AI Email Agent</p>
-    <p align="center">
-        <a href="/README.md">简体中文</a> | English
-    </p>
+    <p align="center">Cloudflare Workers email service - native CF Email Service + External API + D1 backup + AI Email Agent</p>
     <p align="center">
         <a href="/LICENSE">
             <img src="https://img.shields.io/badge/license-MIT-green" />
