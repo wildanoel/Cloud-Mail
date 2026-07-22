@@ -42,7 +42,7 @@
 
       <AgentToggle />
 
-      <el-dropdown ref="userinfoRef" @visible-change="e => userInfoShow = e" :teleported="false" popper-class="detail-dropdown">
+      <el-dropdown ref="userinfoRef" @visible-change="e => userInfoShow = e" popper-class="detail-dropdown">
         <button type="button" class="user-chip" @click="userInfoHide">
           <div class="avatar-text">{{ formatName(userStore.user.email) }}</div>
           <div class="user-chip-meta">

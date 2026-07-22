@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # =============================================================================
-# Cloud Mail — One-Click Deploy Script
+# Cloud Mail Plus — One-Click Deploy Script
 #
 # What it does:
 #   1. Pre-flight: checks node/pnpm/jq/python3, wrangler login
@@ -107,7 +107,7 @@ load_state() { [ -f "$STATE_FILE" ] && source "$STATE_FILE" || true; }
 save_state() {
   umask 077
   cat >"$STATE_FILE" <<EOF
-# Cloud Mail deploy state — do not commit (in .gitignore)
+# Cloud Mail Plus deploy state — do not commit (in .gitignore)
 DOMAINS="${DOMAINS:-}"
 ADMIN="${ADMIN:-}"
 USE_CF_EMAIL="${USE_CF_EMAIL:-}"
@@ -340,7 +340,7 @@ print_summary() {
   cat <<EOF
 
 ============================================
-  Cloud Mail — Deployment Complete!
+  Cloud Mail Plus — Deployment Complete!
 ============================================
 
   Worker URL:     $WORKER_URL
@@ -393,7 +393,7 @@ confirm() {
 
 destroy_all() {
   echo "============================================"
-  echo "  Cloud Mail — Teardown (--destroy)"
+  echo "  Cloud Mail Plus — Teardown (--destroy)"
   echo "============================================"
   echo
   preflight
@@ -517,7 +517,7 @@ fi
 
 # --- Main ---
 echo "============================================"
-echo "  Cloud Mail — One-Click Deploy"
+echo "  Cloud Mail Plus — One-Click Deploy"
 echo "============================================"
 echo
 

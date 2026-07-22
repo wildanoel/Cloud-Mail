@@ -1276,7 +1276,6 @@ function adjustWidth() {
 
 :deep(.el-table) {
   @media (pointer: coarse) {
-    /* 触屏 */
     user-select: none;
   }
 }

@@ -6,49 +6,22 @@ import { cors } from 'hono/cors';
 
 // ============================================================
 // PATCH 1: Restricted CORS
-// Configure allowed origins via env var CORS_ORIGINS (comma-separated)
-// or fall back to same-origin friendly defaults.
 // ============================================================
-function resolveAllowedOrigins(c) {
-	const fromEnv = c?.env?.cors_origins || c?.env?.CORS_ORIGINS;
-	if (typeof fromEnv === 'string' && fromEnv.trim()) {
-		return fromEnv.split(',').map(s => s.trim()).filter(Boolean);
-	}
-	// Safe defaults for local/dev. Override in production via cors_origins.
-	return [
-		'http://127.0.0.1:3001',
-		'http://localhost:3001',
-	];
-}
-
-app.use('*', async (c, next) => {
-	const allowed = resolveAllowedOrigins(c);
-	const origin = c.req.header('Origin');
-	const allowOrigin = origin && allowed.includes(origin) ? origin : (allowed[0] || '*');
-
-	// Apply CORS headers manually so we can use env-based origins
-	if (c.req.method === 'OPTIONS') {
-		return new Response(null, {
-			status: 204,
-			headers: {
-				'Access-Control-Allow-Origin': allowOrigin,
-				'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-				'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-				'Access-Control-Allow-Credentials': 'true',
-				'Access-Control-Max-Age': '86400',
-				'Vary': 'Origin',
-			},
-		});
-	}
-
-	c.header('Access-Control-Allow-Origin', allowOrigin);
-	c.header('Access-Control-Allow-Credentials', 'true');
-	c.header('Vary', 'Origin');
-	await next();
-});
-
-// Keep hono/cors import used only as fallback documentation; real CORS above.
-void cors;
+app.use('*', cors({
+	origin: (origin, c) => {
+		const domains = Array.isArray(c.env?.domain) ? c.env.domain : [c.env?.domain].filter(Boolean);
+		const allowedOrigins = domains.flatMap((domain) => [
+			`https://${domain}`,
+			`https://mail.${domain}`,
+		]);
+		if (!origin) return allowedOrigins[0] || '';
+		return allowedOrigins.includes(origin) ? origin : '';
+	},
+	allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+	allowHeaders: ['Content-Type', 'Authorization'],
+	allowCredentials: true,
+	maxAge: 86400,
+}));
 
 // ============================================================
 // PATCH 2: Security Headers
@@ -90,7 +63,7 @@ app.use('/login', async (c, next) => {
 
 	if (record && record.lockedUntil > now) {
 		const remaining = Math.ceil((record.lockedUntil - now) / 1000);
-		return c.json(result.fail(`Too many login attempts. Try again in ${remaining}s.`, 429));
+		return c.json(result.fail(`Terlalu banyak percobaan login. Coba lagi dalam ${remaining} detik.`, 429));
 	}
 
 	await next();

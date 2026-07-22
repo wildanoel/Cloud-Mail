@@ -15,7 +15,7 @@
           <li><span class="dot"></span>Secure login with modern controls</li>
           <li><span class="dot"></span>Built for speed on the edge</li>
         </ul>
-        <div class="brand-footer">your-domain.com</div>
+        <div class="brand-footer">{{ suffix.replace(/^@/, '') }}</div>
       </section>
 
       <section class="form-wrapper">

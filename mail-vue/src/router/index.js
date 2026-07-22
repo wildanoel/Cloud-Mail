@@ -78,9 +78,9 @@ const router = createRouter({
 })
 
 NProgress.configure({
-    showSpinner: false,   // 不显示旋转图标
-    trickleSpeed: 50,    // 自动递增速度
-    minimum: 0.1          // 最小百分比
+    showSpinner: false,
+    trickleSpeed: 50,
+    minimum: 0.1
 });
 
 let timer

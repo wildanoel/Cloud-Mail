@@ -68,7 +68,7 @@ const telegramService = {
 							inline_keyboard: [
 								[
 									{
-										text: '查看',
+										text: 'Lihat',
 										web_app: { url: webAppUrl }
 									}
 								]
@@ -77,10 +77,10 @@ const telegramService = {
 					})
 				});
 				if (!res.ok) {
-					console.error(`转发 Telegram 失败 status: ${res.status} response: ${await res.text()}`);
+					console.error(`Gagal meneruskan ke Telegram. Status: ${res.status} response: ${await res.text()}`);
 				}
 			} catch (e) {
-				console.error(`转发 Telegram 失败:`, e.message);
+				console.error(`Gagal meneruskan ke Telegram:`, e.message);
 			}
 		}));
 

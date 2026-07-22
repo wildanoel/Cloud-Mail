@@ -17,7 +17,7 @@ const oauthService = {
 		let userRow = await userService.selectByIdIncludeDel(c, oauthRow.userId);
 
 		if (userRow) {
-			throw new BizError('用户已绑定有邮箱')
+			throw new BizError('Pengguna sudah terhubung dengan alamat email')
 		}
 
 		await loginService.register(c, { email, password: cryptoUtils.genRandomPwd(), code }, true);
@@ -109,7 +109,6 @@ const oauthService = {
 		await orm(c).delete(oauth).where(inArray(oauth.userId, userIds)).run();
 	},
 
-	//定时任务凌晨清除未绑定邮箱的oauth用户
 	async clearNoBindOathUser(c) {
 		await orm(c).delete(oauth).where(eq(oauth.userId, 0)).run();
 	},

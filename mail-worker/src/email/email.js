@@ -147,12 +147,10 @@ export async function email(message, env, ctx) {
 
 		}
 
-		//转发到TG
 		if (tgBotStatus === settingConst.tgBotStatus.OPEN && tgChatId) {
 			await telegramService.sendEmailToBot({ env }, emailRow)
 		}
 
-		//转发到其他邮箱
 		if (forwardStatus === settingConst.forwardStatus.OPEN && forwardEmail) {
 
 			const emails = forwardEmail.split(',');
@@ -162,7 +160,7 @@ export async function email(message, env, ctx) {
 				try {
 					await message.forward(email);
 				} catch (e) {
-					console.error(`转发邮箱 ${email} 失败：`, e);
+					console.error(`Gagal meneruskan ke email ${email}:`, e);
 				}
 
 			}));
@@ -170,7 +168,7 @@ export async function email(message, env, ctx) {
 		}
 
 	} catch (e) {
-		console.error('邮件接收异常: ', e);
+		console.error('Terjadi kesalahan saat menerima email: ', e);
 		throw e
 	}
 }

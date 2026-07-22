@@ -410,7 +410,6 @@ watch(scrollbarRef, () => {
   updateHasScrollbar();
 })
 
-// 强制刷新 (itemHeight 更改后虚拟滚动列表不会自己更新)
 watch(itemHeight, () => {
   keyCount.value ++
 })
@@ -440,7 +439,6 @@ watch(noLoading, (isNoLoading) => {
 })
 
 
-// 监听是否到达底部
 watch(() => arrivedState.bottom, (isBottom) => {
   if (isBottom && !loading.value) {
     loadData();
@@ -578,8 +576,8 @@ function htmlToText(email) {
 
 function cleanSpace(text) {
   return text
-      .replace(/[\u200B-\u200F\uFEFF\u034F\u200B-\u200F\u00A0\u3000\u00AD]/g, '')// 移除零宽空格
-      .replace(/\s+/g, ' ')                   // 多空白合并成一个空格
+      .replace(/[\u200B-\u200F\uFEFF\u034F\u200B-\u200F\u00A0\u3000\u00AD]/g, '')
+      .replace(/\s+/g, ' ')
       .trim();
 }
 
@@ -793,7 +791,6 @@ function handleCheckAllChange(val) {
   isIndeterminate.value = false;
 }
 
-// 获取选中的邮件列表id
 function getSelectedMailsIds() {
   return emailList.filter(item => item.checked).map(item => item.emailId);
 }

@@ -7,24 +7,18 @@ keep_vars = true
 [observability]
 enabled = true
 
-# ---------------------------------------------------------------------------
-# Fill these with YOUR Cloudflare resource IDs before deploy.
-# Prefer `bash scripts/deploy.sh` which patches this file safely.
-# NEVER commit real jwt_secret / database_id / kv id / admin email.
-# ---------------------------------------------------------------------------
-
 #[[d1_databases]]
-#binding = "db"                  # D1 database binding (do not change)
-#database_name = ""              # Your D1 database name
-#database_id = ""                # Your D1 database ID
+#binding = "db"			# D1 database binding (do not change)
+#database_name = ""		# Your D1 database name
+#database_id = ""		# Your D1 database ID
 
 #[[kv_namespaces]]
-#binding = "kv"                  # KV binding (do not change)
-#id = ""                         # Your KV namespace ID
+#binding = "kv"			# KV binding (do not change)
+#id = ""				# Your KV namespace ID
 
 #[[r2_buckets]]
-#binding = "r2"                  # R2 binding (do not change)
-#bucket_name = ""                # Your R2 bucket name
+#binding = "r2"			# R2 binding (do not change)
+#bucket_name = ""		# Your R2 bucket name
 
 [assets]
 binding = "assets"
@@ -33,7 +27,7 @@ not_found_handling = "single-page-application"
 run_worker_first = true
 
 [triggers]
-crons = ["0 16 * * *"]          # Daily housekeeping at 16:00 UTC
+crons = ["0 16 * * *"]	# Daily housekeeping at 16:00 UTC
 
 # Uncomment to enable Cloudflare Email Service for outbound sending
 #[[send_email]]
@@ -53,11 +47,11 @@ crons = ["0 16 * * *"]          # Daily housekeeping at 16:00 UTC
 #tag = "v1-add-email-agent"
 #new_sqlite_classes = ["EmailAgent"]
 
-# [vars]
-# orm_log = false
-# domain = '["example.com"]'     # Your email domains (array)
-# admin = "admin@example.com"    # Admin email address
-# jwt_secret = ""                # Random string for JWT signing (REQUIRED)
+#[vars]
+#orm_log = false
+#domain = '["example.com"]'	# Your email domains (array)
+#admin = "admin@example.com"	# Admin email address
+#jwt_secret = ""				# Random string for JWT signing
 
 [build]
 command = "pnpm --prefix ../mail-vue install && pnpm --prefix ../mail-vue run build"

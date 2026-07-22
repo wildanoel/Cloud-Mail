@@ -332,7 +332,6 @@ async function latest() {
         continue
       }
 
-      // 确保回来之后条件没变
       if (params.timeSort !== curTimeSort) {
         continue
       }
@@ -365,11 +364,11 @@ async function latest() {
 
   .my-date-picker::after {
     content: "";
-    position: absolute; /* 脱离文档流，不会撑开 */
+    position: absolute; 
     left: 0;
     right: 0;
     height: 20px;
-    background: transparent; /* 方便看效果 */
+    background: transparent; 
   }
 
   .el-date-range-picker__content {
