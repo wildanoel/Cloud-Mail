@@ -178,6 +178,10 @@
             </div>
           </template>
         </el-input>
+        <div class="name-row">
+          <el-input v-model="addForm.firstName" type="text" :placeholder="$t('firstName')" autocomplete="off"/>
+          <el-input v-model="addForm.lastName" type="text" :placeholder="$t('lastName')" autocomplete="off"/>
+        </div>
         <el-input type="password" v-model="addForm.password" :placeholder="$t('password')"/>
         <el-select v-model="addForm.type" :placeholder="$t('perm')">
           <el-option v-for="item in roleList" :label="item.name" :value="item.roleId" :key="item.roleId"/>
@@ -440,6 +444,8 @@ const addForm = reactive({
   email: '',
   suffix: settingStore.domainList[0],
   password: '',
+  firstName: '',
+  lastName: '',
   type: null,
 })
 
@@ -685,6 +691,8 @@ function resetAddForm() {
   addForm.suffix = settingStore.domainList[0]
   addForm.type = null
   addForm.password = ''
+  addForm.firstName = ''
+  addForm.lastName = ''
 }
 
 function openAdd() {
@@ -1115,6 +1123,14 @@ function adjustWidth() {
   display: grid;
   grid-template-columns: 1fr;
   gap: 15px;
+}
+
+.name-row {
+  display: flex;
+  gap: 10px;
+}
+.name-row .el-input {
+  flex: 1;
 }
 
 .type {

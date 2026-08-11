@@ -4,6 +4,8 @@ export const account = sqliteTable('account', {
 	accountId: integer('account_id').primaryKey({ autoIncrement: true }),
 	email: text('email').notNull(),
 	name: text('name').notNull().default(''),
+	firstName: text('first_name').notNull().default(''),
+	lastName: text('last_name').notNull().default(''),
 	status: integer('status').default(0).notNull(),
 	latestEmailTime: text('latest_email_time'),
 	createTime: text('create_time').default(sql`CURRENT_TIMESTAMP`),

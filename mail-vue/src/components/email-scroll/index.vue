@@ -1027,7 +1027,7 @@ function loadData() {
     column-gap: 12px;
     margin-top: 6px;
     margin-bottom: 2px;
-    color: #64748b;
+    color: var(--el-text-color-secondary);
     font-size: 13px;
     @media (max-width: 1366px) {
       flex-direction: column;
@@ -1191,7 +1191,7 @@ function loadData() {
         white-space: nowrap;
         text-overflow: ellipsis;
         font-weight: 500;
-        color: #1e293b;
+        color: var(--el-text-color-primary);
         @media (min-width: 1367px) {
           padding-left: 6px;
         }
@@ -1202,7 +1202,7 @@ function loadData() {
         white-space: nowrap;
         text-overflow: ellipsis;
         padding-left: 12px;
-        color: #64748b;
+        color: var(--el-text-color-regular);
         font-size: 13px;
         @media (max-width: 1366px) {
           padding-left: 0;
@@ -1216,7 +1216,7 @@ function loadData() {
   .email-right {
     text-align: right;
     font-size: 12px;
-    color: #94a3b8;
+    color: var(--el-text-color-secondary);
     white-space: nowrap;
     display: flex;
     padding-left: 16px;
@@ -1233,7 +1233,7 @@ function loadData() {
   }
 
   &:hover {
-    background-color: #f8fafc;
+    background-color: var(--el-fill-color-light);
     z-index: 0;
   }
 
@@ -1309,7 +1309,7 @@ function loadData() {
     .email-count {
       white-space: nowrap;
       margin-top: 8px;
-      color: #64748b;
+      color: var(--el-text-color-secondary);
       font-size: 13px;
     }
   }

@@ -3,16 +3,17 @@
     <div class="container">
       <div class="title">{{$t('profile')}}</div>
       <div class="item">
-        <div>{{$t('username')}}</div>
+        <div>{{$t('displayName')}}</div>
         <div>
-          <span v-if="setNameShow" class="edit-name-input">
-            <el-input v-model="accountName"  ></el-input>
+          <span v-if="setNameShow" class="edit-name-input edit-name-multi">
+            <el-input v-model="firstName" :placeholder="$t('firstName')" ></el-input>
+            <el-input v-model="lastName" :placeholder="$t('lastName')" ></el-input>
             <span class="edit-name" @click="setName">
              {{$t('save')}}
             </span>
           </span>
           <span v-else class="user-name">
-            <span >{{ userStore.user.name }}</span>
+            <span >{{ userStore.user.name || $t('notSet') }}</span>
             <span class="edit-name" @click="showSetName">
              {{$t('change')}}
             </span>
@@ -65,19 +66,26 @@ const userStore = useUserStore();
 const setPwdLoading = ref(false)
 const setNameShow = ref(false)
 const accountName = ref(null)
+const firstName = ref('')
+const lastName = ref('')
 
 defineOptions({
   name: 'setting'
 })
 
 function showSetName() {
+  firstName.value = userStore.user.firstName || ''
+  lastName.value = userStore.user.lastName || ''
   accountName.value = userStore.user.name
   setNameShow.value = true
 }
 
 function setName() {
 
-  if (!accountName.value) {
+  const fName = (firstName.value || '').trim()
+  const lName = (lastName.value || '').trim()
+
+  if (!fName && !lName) {
     ElMessage({
       message: t('emptyUserNameMsg'),
       type: 'error',
@@ -87,25 +95,33 @@ function setName() {
   }
 
   setNameShow.value = false
-  let name = accountName.value
 
-  if (name === userStore.user.name) {
+  const displayName = [fName, lName].filter(Boolean).join(' ')
+  const prevName = userStore.user.name
+  const prevFirst = userStore.user.firstName
+  const prevLast = userStore.user.lastName
+
+  if (displayName === prevName && fName === prevFirst && lName === prevLast) {
     return
   }
 
-  userStore.user.name = accountName.value
+  userStore.user.name = displayName
+  userStore.user.firstName = fName
+  userStore.user.lastName = lName
 
-  accountSetName(userStore.user.account.accountId,name).then(() => {
+  accountSetName(userStore.user.account.accountId, displayName, fName, lName).then(() => {
     ElMessage({
       message: t('saveSuccessMsg'),
       type: 'success',
       plain: true,
     })
 
-    accountStore.changeUserAccountName = name
+    accountStore.changeUserAccountName = displayName
 
   }).catch(() => {
-    userStore.user.name = name
+    userStore.user.name = prevName
+    userStore.user.firstName = prevFirst
+    userStore.user.lastName = prevLast
   })
 }
 
@@ -226,6 +242,15 @@ function submitPwd() {
         bottom: -6px;
         .el-input {
           width: min(200px,calc(100vw - 222px));
+        }
+      }
+
+      .edit-name-multi {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        .el-input {
+          width: min(130px,calc((100vw - 240px) / 2));
         }
       }
 

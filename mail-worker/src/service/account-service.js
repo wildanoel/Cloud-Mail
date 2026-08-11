@@ -213,11 +213,18 @@ const accountService = {
 	},
 
 	async setName(c, params, userId) {
-		const { name, accountId } = params
-		if (name.length > 30) {
+		const { name, firstName = '', lastName = '', accountId } = params
+		const fName = (firstName || '').trim()
+		const lName = (lastName || '').trim()
+		// Composed display name: "First Last" takes priority; fallback to legacy name field
+		const displayName = [fName, lName].filter(Boolean).join(' ') || (name || '').trim()
+		if (displayName.length > 30) {
 			throw new BizError(t('usernameLengthLimit'));
 		}
-		await orm(c).update(account).set({name}).where(and(eq(account.userId, userId),eq(account.accountId, accountId))).run();
+		if (fName.length > 30 || lName.length > 30) {
+			throw new BizError(t('usernameLengthLimit'));
+		}
+		await orm(c).update(account).set({ name: displayName, firstName: fName, lastName: lName }).where(and(eq(account.userId, userId),eq(account.accountId, accountId))).run();
 	},
 
 	async allAccount(c, params) {

@@ -41,6 +41,8 @@ const userService = {
 		user.email = userRow.email;
 		user.account = account;
 		user.name = account.name;
+		user.firstName = account.firstName || '';
+		user.lastName = account.lastName || '';
 		user.permKeys = permKeys;
 		user.role = roleRow;
 		user.type = userRow.type;
@@ -322,7 +324,10 @@ const userService = {
 
 	async add(c, params) {
 
-		const { email, type, password } = params;
+		const { email, type, password, firstName = '', lastName = '' } = params;
+		const fName = (firstName || '').trim();
+		const lName = (lastName || '').trim();
+		const displayName = [fName, lName].filter(Boolean).join(' ') || emailUtils.getName(email);
 
 		if (!c.env.domain.includes(emailUtils.getDomain(email))) {
 			throw new BizError(t('notEmailDomain'));
@@ -354,7 +359,7 @@ const userService = {
 
 		await userService.updateUserInfo(c, userId, true);
 
-		await accountService.insert(c, { userId: userId, email, type, name: emailUtils.getName(email) });
+		await accountService.insert(c, { userId: userId, email, type, name: displayName, firstName: fName, lastName: lName });
 	},
 
 	async resetDaySendCount(c) {

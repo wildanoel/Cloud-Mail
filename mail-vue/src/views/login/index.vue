@@ -15,7 +15,6 @@
           <li><span class="dot"></span>Secure login with modern controls</li>
           <li><span class="dot"></span>Built for speed on the edge</li>
         </ul>
-        <div class="brand-footer">{{ suffix.replace(/^@/, '') }}</div>
       </section>
 
       <section class="form-wrapper">
@@ -28,7 +27,7 @@
           <div class="input-group">
             <Icon class="input-icon" icon="mdi:email-outline" width="18" height="18" />
             <input v-model="form.email" class="custom-input" type="email" :placeholder="$t('emailAccount')" autocomplete="username" />
-            <span class="domain-suffix" v-if="settingStore.settings.loginDomain === 0">{{ suffix }}</span>
+            <span class="domain-suffix" v-if="settingStore.settings.loginDomain === 0">{{ displaySuffix }}</span>
           </div>
           <div class="input-group">
             <Icon class="input-icon" icon="mdi:lock-outline" width="18" height="18" />
@@ -45,7 +44,7 @@
           <div class="input-group">
             <Icon class="input-icon" icon="mdi:email-outline" width="18" height="18" />
             <input v-model="registerForm.email" class="custom-input" type="email" :placeholder="$t('emailAccount')" autocomplete="off" />
-            <span class="domain-suffix">{{ suffix }}</span>
+            <span class="domain-suffix">{{ displaySuffix }}</span>
           </div>
           <div class="input-group">
             <Icon class="input-icon" icon="mdi:lock-outline" width="18" height="18" />
@@ -79,7 +78,7 @@
         <div class="input-group">
           <Icon class="input-icon" icon="mdi:email-outline" width="18" height="18" />
           <input v-model="bindForm.email" class="custom-input" type="email" :placeholder="$t('emailAccount')" autocomplete="off" />
-          <span class="domain-suffix">{{ suffix }}</span>
+          <span class="domain-suffix">{{ displaySuffix }}</span>
         </div>
         <div class="input-group" v-if="settingStore.settings.regKey === 0 || settingStore.settings.regKey === 2">
           <Icon class="input-icon" icon="mdi:key-outline" width="18" height="18" />
@@ -125,6 +124,7 @@ const bindForm = reactive({ email: '', oauthUserId: '', code: '' })
 const suffix = ref('')
 const domainList = settingStore.domainList
 suffix.value = domainList[0]
+const displaySuffix = computed(() => suffix.value)
 
 const background = computed(() => settingStore.settings.background ? {
   'background-image': `url(${settingStore.settings.background})`,
