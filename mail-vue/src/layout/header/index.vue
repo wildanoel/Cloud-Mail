@@ -3,7 +3,7 @@
     <div class="header-left">
       <hanburger @click="changeAside"></hanburger>
       <div class="page-meta">
-        <span class="breadcrumb-kicker">Cloud Mail</span>
+        <span class="breadcrumb-kicker">Dev's Mail</span>
         <span class="breadcrumb-item">{{ $t(route.meta.title) }}</span>
       </div>
     </div>
@@ -368,8 +368,8 @@ function formatName(email) {
     margin-top: 20px;
     height: 42px;
     width: 42px;
-    background: #172554;
-    color: #FFC402;
+    background: #0a0a0a;
+    color: #ff5b2e;
     border: none;
     font-size: 18px;
     font-weight: 700;
@@ -437,9 +437,9 @@ function formatName(email) {
   height: 38px;
   padding: 0 14px;
   border-radius: 12px;
-  color: #172554;
-  background: #FFC402;
-  box-shadow: 0 8px 18px rgba(255, 196, 2, 0.28);
+  color: #0a0a0a;
+  background: #ff5b2e;
+  box-shadow: 0 8px 18px rgba(255, 91, 46, 0.28);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   font-weight: 700;
   font-size: 13px;
@@ -448,7 +448,7 @@ function formatName(email) {
 
 .compose-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(255, 196, 2, 0.36);
+  box-shadow: 0 10px 22px rgba(255, 91, 46, 0.36);
 }
 
 .compose-label {
@@ -469,7 +469,7 @@ function formatName(email) {
   gap: 3px;
   padding: 3px;
   border-radius: 14px;
-  background: #172554;
+  background: #0a0a0a;
   border: 1px solid rgba(23, 37, 84, 0.9);
   box-shadow: 0 6px 16px rgba(23, 37, 84, 0.22);
 }
@@ -490,8 +490,8 @@ function formatName(email) {
 }
 
 .tool-btn:hover {
-  background: rgba(255, 196, 2, 0.18);
-  color: #FFC402;
+  background: rgba(255, 91, 46, 0.18);
+  color: #ff5b2e;
   transform: translateY(-1px);
 }
 
@@ -502,7 +502,7 @@ function formatName(email) {
   padding: 0 10px;
   font-size: 12px;
   font-weight: 700;
-  color: #FFC402;
+  color: #ff5b2e;
 }
 
 .user-chip {
@@ -526,8 +526,8 @@ function formatName(email) {
 }
 
 .avatar-text {
-  background: #172554;
-  color: #FFC402;
+  background: #0a0a0a;
+  color: #ff5b2e;
   height: 32px;
   width: 32px;
   display: flex;
@@ -597,7 +597,7 @@ function formatName(email) {
     height: 36px;
     padding: 0;
     border-radius: 11px;
-    box-shadow: 0 4px 12px rgba(255, 196, 2, 0.24);
+    box-shadow: 0 4px 12px rgba(255, 91, 46, 0.24);
   }
 
   .tool-cluster {
@@ -717,8 +717,8 @@ html.dark .breadcrumb-kicker,
 
 html.dark .tool-cluster,
 .dark .tool-cluster {
-  background: #0B1430 !important;
-  border-color: rgba(255, 196, 2, 0.28) !important;
+  background: #0a0a0a !important;
+  border-color: rgba(255, 91, 46, 0.28) !important;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35) !important;
 }
 
@@ -729,13 +729,13 @@ html.dark .tool-btn,
 
 html.dark .tool-btn:hover,
 .dark .tool-btn:hover {
-  background: rgba(255, 196, 2, 0.16) !important;
-  color: #FFC402 !important;
+  background: rgba(255, 91, 46, 0.16) !important;
+  color: #ff5b2e !important;
 }
 
 html.dark .lang-btn,
 .dark .lang-btn {
-  color: #FFC402 !important;
+  color: #ff5b2e !important;
 }
 
 html.dark .user-chip,

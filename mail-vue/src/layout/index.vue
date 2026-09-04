@@ -61,7 +61,7 @@ onBeforeUnmount(() => {
   z-index: 100;
   transform: translateX(-100%);
   transition: all 100ms ease;
-  background: var(--app-sidebar, #0B1430) !important;
+  background: var(--app-sidebar, #0a0a0a) !important;
 }
 
 .aside-show {
@@ -70,7 +70,7 @@ onBeforeUnmount(() => {
   transform: translateX(0);
   transition: all 100ms ease;
   z-index: 101;
-  background: var(--app-sidebar, #0B1430) !important;
+  background: var(--app-sidebar, #0a0a0a) !important;
   @media (max-width: 1025px) {
     position: fixed;
     top: 0;
@@ -78,14 +78,14 @@ onBeforeUnmount(() => {
     z-index: 101;
     height: 100%;
     width: min(280px, 84vw) !important;
-    background: var(--app-sidebar, #0B1430) !important;
+    background: var(--app-sidebar, #0a0a0a) !important;
   }
 }
 
 .el-aside {
   width: 240px;
   transition: all 100ms ease;
-  background: var(--app-sidebar, #0B1430) !important;
+  background: var(--app-sidebar, #0a0a0a) !important;
   overflow: hidden;
 }
 

@@ -1,25 +1,23 @@
 <template>
-  <div id="login-box" :style="background ? 'background: var(--el-bg-color)' : ''" v-loading="oauthLoading" element-loading-text="Loading...">
-    <div class="login-shell">
-      <section class="brand-panel">
-        <div class="brand-badge">
-          <Icon icon="mdi:email-fast-outline" width="22" height="22" />
-          <span>Cloud Mail</span>
-        </div>
-        <h1 class="brand-title">Inbox that stays fast, private, and under your control.</h1>
-        <p class="brand-copy">
-          Serverless email on Cloudflare. Clean UI, zero clutter, ready for teams and personal accounts.
-        </p>
-        <ul class="brand-points">
-          <li><span class="dot"></span>Instant accounts on your domain</li>
-          <li><span class="dot"></span>Secure login with modern controls</li>
-          <li><span class="dot"></span>Built for speed on the edge</li>
-        </ul>
-      </section>
+  <div id="login-box" v-loading="oauthLoading" element-loading-text="Loading...">
+    <!-- playful floating 3D shapes, matching wildanoel.dev -->
+    <div class="shapes" aria-hidden="true">
+      <img class="shape shape-1" src="/shapes/orange-pyramid.png" alt="" />
+      <img class="shape shape-2" src="/shapes/purple-sphere.png" alt="" />
+      <img class="shape shape-3" src="/shapes/turquoise-star.png" alt="" />
+      <img class="shape shape-4" src="/shapes/lime-object.png" alt="" />
+      <img class="shape shape-5" src="/shapes/blue-cylinder.png" alt="" />
+      <img class="shape shape-6" src="/shapes/yellow-cube.png" alt="" />
+    </div>
 
-      <section class="form-wrapper">
-        <div class="form-kicker">{{ mode === 'login' ? 'Welcome back' : 'Create account' }}</div>
-        <span class="form-title">{{ settingStore.settings.title }}</span>
+    <div class="auth-stage">
+      <div class="auth-card">
+        <a class="brand-word" href="https://wildanoel.dev">
+          <span class="brand-dot"></span>Wildanoel
+        </a>
+
+        <div class="form-kicker">{{ mode === 'login' ? 'Welcome back' : 'Create your account' }}</div>
+        <span class="form-title">{{ mode === 'login' ? 'Sign in to your mailbox.' : 'Create your mailbox.' }}</span>
         <span class="form-desc" v-if="mode === 'login'">{{ $t('loginTitle') }}</span>
         <span class="form-desc" v-else>{{ $t('regTitle') }}</span>
 
@@ -70,7 +68,9 @@
           </template>
         </div>
 
-      </section>
+        <div class="card-footer">Secured mailbox on wildanoel.dev</div>
+
+      </div>
     </div>
 
     <el-dialog class="bind-dialog" v-model="bindDialog" title="Bind Email" width="420px">
@@ -233,140 +233,111 @@ async function saveToken(token) {
 </script>
 
 <style scoped>
+/* ===== Wildanoel Mail login — matches wildanoel.dev: light paper, ink type, orange accent, floating 3D shapes ===== */
 #login-box {
+  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 28px;
-  color: #0F172A;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(255, 196, 2, 0.18), transparent 55%),
-    radial-gradient(900px 500px at 100% 0%, rgba(30, 58, 138, 0.16), transparent 50%),
-    linear-gradient(160deg, #EEF2F8 0%, #F8FAFC 45%, #FFFFFF 100%);
-}
-.login-shell {
-  width: min(980px, 100%);
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  border-radius: 28px;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.1);
+  padding: 24px;
   overflow: hidden;
-  backdrop-filter: blur(10px);
+  color: #0a0a0a;
+  font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #ffffff;
 }
-.brand-panel {
-  position: relative;
-  padding: 42px 40px;
-  color: #F8FAFC;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(255, 196, 2, 0.18), transparent 40%),
-    linear-gradient(160deg, #0B1430 0%, #172554 55%, #1e3a8a 100%);
+
+/* floating 3D shapes (same assets as the main site) */
+.shapes { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.shape { position: absolute; width: clamp(56px, 9vw, 132px); will-change: transform; filter: drop-shadow(0 18px 32px rgba(0,0,0,0.12)); }
+.shape-1 { top: 12%;  left: 10%;  animation: float 6s ease-in-out infinite; }
+.shape-2 { top: 20%;  right: 12%; animation: float 7s ease-in-out infinite 0.6s; }
+.shape-3 { bottom: 16%; left: 14%; animation: float 6.5s ease-in-out infinite 1.2s; }
+.shape-4 { bottom: 12%; right: 15%; animation: float 7.5s ease-in-out infinite 0.3s; }
+.shape-5 { top: 48%;  left: 4%;   animation: float 8s ease-in-out infinite 0.9s; }
+.shape-6 { top: 52%;  right: 5%;  animation: float 6.8s ease-in-out infinite 1.5s; }
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-18px) rotate(6deg); }
+}
+@media (max-width: 640px) {
+  .shape-5, .shape-6 { display: none; }
+  .shape { width: clamp(46px, 14vw, 80px); }
+}
+
+/* single centered auth card — light, rounded, soft shadow */
+.auth-stage { position: relative; z-index: 1; width: 100%; display: flex; justify-content: center; }
+.auth-card {
+  width: min(440px, 100%);
+  padding: 40px 40px 30px;
+  border-radius: 32px;
+  background: #ffffff;
+  border: 1px solid #ededed;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.10);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-height: 560px;
+  animation: cardIn 0.6s cubic-bezier(0.16,1,0.3,1) both;
 }
-.brand-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  width: fit-content;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #FFF4C2;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 28px;
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(18px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
-.brand-title {
-  font-family: 'Sora', 'Inter', sans-serif;
-  font-size: clamp(28px, 3vw, 36px);
-  font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-  margin-bottom: 14px;
-  text-wrap: balance;
+.brand-word {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Public Sans', 'Inter', sans-serif;
+  font-size: 16px; font-weight: 700; letter-spacing: -0.01em;
+  color: #0a0a0a; text-decoration: none; margin-bottom: 28px;
 }
-.brand-copy {
-  color: #CBD5E1;
-  font-size: 15px;
-  line-height: 1.6;
-  max-width: 36ch;
-  margin-bottom: 28px;
-}
-.brand-points { display: grid; gap: 12px; margin-bottom: 36px; }
-.brand-points li {
-  display: flex; align-items: center; gap: 10px;
-  color: #E2E8F0; font-size: 14px; font-weight: 500;
-}
-.brand-points .dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: #FFC402; box-shadow: 0 0 0 4px rgba(255, 196, 2, 0.15); flex-shrink: 0;
-}
-.brand-footer {
-  margin-top: auto; color: #94A3B8; font-size: 12px;
-  letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600;
-}
-.form-wrapper {
-  width: 100%; padding: 42px 40px; background: #FFFFFF;
-  display: flex; flex-direction: column; justify-content: center;
-}
+.brand-dot { width: 10px; height: 10px; border-radius: 50%; background: #ff5b2e; display: inline-block; }
 .form-kicker {
-  display: inline-flex; width: fit-content; padding: 6px 12px; border-radius: 999px;
-  background: #FFF4C2; color: #172554; font-size: 12px; font-weight: 700; margin-bottom: 14px;
+  display: inline-flex; width: fit-content; padding: 5px 12px; border-radius: 999px;
+  background: rgba(255,91,46,0.10); border: 1px solid rgba(255,91,46,0.22);
+  color: #ff5b2e; font-size: 12px; font-weight: 700; margin-bottom: 14px;
 }
 .form-title {
-  font-family: 'Sora', 'Inter', sans-serif; font-weight: 800; font-size: 28px;
-  letter-spacing: -0.03em; color: #0F172A; margin-bottom: 6px; line-height: 1.15;
+  font-family: 'Public Sans', 'Inter', sans-serif; font-weight: 800; font-size: 32px;
+  letter-spacing: -0.03em; color: #0a0a0a; margin-bottom: 8px; line-height: 1.08;
 }
-.form-desc { color: #64748B; font-size: 14px; margin-bottom: 28px; line-height: 1.5; }
+.form-desc { color: #6b6b6b; font-size: 14px; margin-bottom: 26px; line-height: 1.5; }
 .form-body { width: 100%; }
 .input-group { position: relative; width: 100%; margin-bottom: 12px; display: flex; align-items: center; }
-.input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94A3B8; z-index: 2; pointer-events: none; }
+.input-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #9a9a9a; z-index: 2; pointer-events: none; }
 .custom-input {
-  width: 100%; height: 48px; padding: 0 14px 0 42px; border: 1.5px solid #E2E8F0;
-  border-radius: 14px; background: #F8FAFC; font-size: 15px; font-family: inherit; color: #0F172A;
+  width: 100%; height: 52px; padding: 0 16px 0 46px; border: 1.5px solid #ededed;
+  border-radius: 14px; background: #fafafa; font-size: 15px; font-family: inherit; color: #0a0a0a;
   transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease; box-sizing: border-box;
 }
-.custom-input::placeholder { color: #94A3B8; }
-.custom-input:hover { border-color: #CBD5E1; background: #FFFFFF; }
-.custom-input:focus { outline: none; border-color: #172554; background: #FFFFFF; box-shadow: 0 0 0 4px rgba(23, 37, 84, 0.08); }
+.custom-input::placeholder { color: #9a9a9a; }
+.custom-input:hover { border-color: #d8d8d8; background: #fff; }
+.custom-input:focus { outline: none; border-color: #ff5b2e; background: #fff; box-shadow: 0 0 0 4px rgba(255,91,46,0.14); }
 .domain-suffix {
-  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
-  color: #64748B; font-size: 13px; font-weight: 600; pointer-events: none; background: transparent; padding-left: 8px;
+  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  color: #6b6b6b; font-size: 13px; font-weight: 600; pointer-events: none; background: transparent; padding-left: 8px;
 }
 .btn {
-  width: 100%; height: 48px; border-radius: 9999px; font-size: 15px; font-weight: 700;
-  background: #FFC402; border: none; color: #172554; cursor: pointer; margin-top: 10px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease; font-family: inherit;
+  width: 100%; height: 52px; border-radius: 999px; font-size: 15px; font-weight: 700;
+  background: #0a0a0a; border: none; color: #ffffff; cursor: pointer; margin-top: 14px;
+  transition: transform 0.15s ease, filter 0.15s ease; font-family: inherit;
   display: inline-flex; align-items: center; justify-content: center;
-  box-shadow: 0 10px 20px rgba(255, 196, 2, 0.28);
 }
-.btn:hover:not(:disabled) { background: #FFD233; transform: translateY(-1px); box-shadow: 0 14px 24px rgba(255, 196, 2, 0.34); }
-.btn:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
-.btn-secondary { background: #FFFFFF; color: #172554; border: 1.5px solid #E2E8F0; margin-top: 10px; box-shadow: none; }
-.btn-secondary:hover:not(:disabled) { background: #F8FAFC; border-color: #172554; box-shadow: none; }
+.btn:hover:not(:disabled) { transform: scale(0.985); filter: brightness(1.12); }
+.btn:active:not(:disabled) { transform: scale(0.97); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn-secondary { background: #fff; color: #0a0a0a; border: 1.5px solid #ededed; margin-top: 10px; }
+.btn-secondary:hover:not(:disabled) { background: #fafafa; border-color: #d8d8d8; filter: none; }
 .linuxdo-icon { width: 18px; height: 18px; margin-right: 8px; vertical-align: middle; }
-.switch { margin-top: 22px; text-align: center; font-size: 14px; color: #64748B; line-height: 1.5; }
-.switch span { color: #172554; cursor: pointer; font-weight: 700; }
+.switch { margin-top: 22px; text-align: center; font-size: 14px; color: #6b6b6b; line-height: 1.5; }
+.switch span { color: #ff5b2e; cursor: pointer; font-weight: 700; }
 .switch span:hover { text-decoration: underline; }
+.card-footer {
+  margin-top: 26px; padding-top: 20px; border-top: 1px solid #ededed;
+  text-align: center; color: #9a9a9a; font-size: 12px; letter-spacing: 0.02em;
+}
 .bind-container { display: flex; flex-direction: column; gap: 12px; }
 .bind-dialog { border-radius: 20px; }
-@media (max-width: 900px) {
-  .login-shell { grid-template-columns: 1fr; }
-  .brand-panel { min-height: auto; padding: 28px 24px 24px; }
-  .brand-title { font-size: 26px; }
-  .brand-copy, .brand-points { display: none; }
-  .form-wrapper { padding: 28px 22px 32px; }
-}
 @media (max-width: 540px) {
-  #login-box { padding: 12px; }
-  .login-shell { border-radius: 22px; }
-  .form-title { font-size: 24px; }
+  #login-box { padding: 16px; }
+  .auth-card { padding: 32px 24px 26px; border-radius: 26px; }
+  .form-title { font-size: 27px; }
 }
 </style>

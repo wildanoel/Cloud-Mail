@@ -51,6 +51,7 @@ const id = {
 	daySendLack: 'Sisa kuota kirim hari ini tidak cukup',
 	totalSendLack: 'Sisa kuota kirim tidak cukup',
 	senderAccountNotExist: 'Email pengirim tidak ditemukan',
+	sendParamError: 'Pilih pengirim dan minimal satu penerima',
 	noResendToken: 'Resend belum dikonfigurasi, hanya bisa kirim ke email internal',
 	sendEmailNotCurUser: 'Email pengirim bukan milik kamu',
 	notExistEmailReply: 'Email yang mau dibalas tidak ditemukan',

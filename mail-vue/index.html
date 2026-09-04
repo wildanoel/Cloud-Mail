@@ -3,31 +3,32 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="theme-color" content="#EEF2F8" id="theme-color-meta">
-  <meta name="description" content="Cloud Mail Indonesia - Serverless email service powered by Cloudflare. Free, secure, and reliable email hosting.">
-  <title>Cloud Mail</title>
+  <meta name="theme-color" content="#ffffff" id="theme-color-meta">
+  <meta name="description" content="Dev's Mail - Fast, private, and secure email on wildanoel.dev. Clean UI, zero clutter.">
+  <title>Dev's Mail</title>
   <link rel="icon" href="/mail.png" type="image/png">
   <link rel="apple-touch-icon" href="/mail-pwa.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script>
     const uiStoreStr =  localStorage.getItem('ui')
+    const root = document.documentElement
+    const metaTag = document.getElementById('theme-color-meta');
+    const isMobile =  !window.matchMedia("(pointer: fine) and (hover: hover)").matches;
+    let dark = false;
     if (uiStoreStr) {
-      const uiStore =  JSON.parse(uiStoreStr)
-      const root = document.documentElement
-      root.setAttribute('class', uiStore.dark ? 'dark' : '');
-      const metaTag = document.getElementById('theme-color-meta');
-      const isMobile =  !window.matchMedia("(pointer: fine) and (hover: hover)").matches;
-      metaTag.setAttribute('content', uiStore.dark ? (isMobile ? '#141414' : '#000000') : (isMobile ? '#FFFFFF' : '#F1F1F1'));
+      try { dark = JSON.parse(uiStoreStr).dark ?? false } catch (e) { dark = false }
     }
+    root.setAttribute('class', dark ? 'dark' : '');
+    metaTag.setAttribute('content', dark ? (isMobile ? '#141414' : '#0c0a09') : (isMobile ? '#FFFFFF' : '#F1F1F1'));
   </script>
 </head>
 <style>
   html {
-    background: #EEF2F8;
+    background: #ffffff;
   }
   .dark {
-    background: #070B16;
+    background: #0c0a09;
   }
   #loading-first {
     position: fixed;
@@ -63,14 +64,14 @@
 
   .loading-path .dot1 {
     transform: translate(3.75px, 3.75px);
-    fill: #409EFF;
+    fill: #ff5b2e;
     animation: custom-spin-move 1s infinite linear alternate;
     opacity: 0.3;
   }
 
   .loading-path .dot2 {
     transform: translate(calc(100% - 3.75px), 3.75px);
-    fill: #409EFF;
+    fill: #ff5b2e;
     animation: custom-spin-move 1s infinite linear alternate;
     opacity: 0.3;
     animation-delay: 0.4s;
@@ -78,7 +79,7 @@
 
   .loading-path .dot3 {
     transform: translate(3.75px, calc(100% - 3.75px));
-    fill: #409EFF;
+    fill: #ff5b2e;
     animation: custom-spin-move 1s infinite linear alternate;
     opacity: 0.3;
     animation-delay: 1.2s;
@@ -86,7 +87,7 @@
 
   .loading-path .dot4 {
     transform: translate(calc(100% - 3.75px), calc(100% - 3.75px));
-    fill: #409EFF;
+    fill: #ff5b2e;
     animation: custom-spin-move 1s infinite linear alternate;
     opacity: 0.3;
     animation-delay: 0.8s;

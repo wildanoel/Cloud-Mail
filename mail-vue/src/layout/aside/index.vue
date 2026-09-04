@@ -7,7 +7,7 @@
         </div>
         <div class="title-text">{{settingStore.settings.title}}</div>
       </div>
-      <el-menu :collapse="false" text-color="#CBD5E1" active-text-color="#FFC402" background-color="transparent" style="margin-top: 10px; border-right: none;">
+      <el-menu :collapse="false" text-color="#CBD5E1" active-text-color="#ff5b2e" background-color="transparent" style="margin-top: 10px; border-right: none;">
         <el-menu-item @click="router.push({name: 'email'})" index="email" :class="route.meta.name === 'email' ? 'choose-item' : ''">
           <Icon icon="solar:inbox-bold" width="20" height="20" />
           <span class="menu-name">{{$t('inbox')}}</span>
@@ -81,7 +81,7 @@ const route = useRoute();
 }
 .title-mark {
   width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
-  background: #FFC402; color: #172554; flex-shrink: 0;
+  background: #ff5b2e; color: #0a0a0a; flex-shrink: 0;
 }
 .title-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 :deep(.el-menu) { background: transparent !important; border-right: none !important; }
@@ -92,19 +92,19 @@ const route = useRoute();
   display: flex; align-items: center; gap: 12px;
 }
 :deep(.el-menu-item:hover) { background: rgba(255, 255, 255, 0.06) !important; color: #F8FAFC !important; }
-:deep(.el-menu-item.is-active) { background: rgba(255, 196, 2, 0.14) !important; color: #FFC402 !important; }
+:deep(.el-menu-item.is-active) { background: rgba(255, 91, 46, 0.14) !important; color: #ff5b2e !important; }
 :deep(.el-menu-item .menu-name) { color: inherit !important; margin-left: 0 !important; }
 :deep(.el-menu-item .iconify) { color: #94A3B8; transition: color 0.15s ease; flex-shrink: 0; }
 :deep(.el-menu-item:hover .iconify),
-:deep(.el-menu-item.is-active .iconify) { color: #FFC402; }
-.choose-item { background: rgba(255, 196, 2, 0.14) !important; color: #FFC402 !important; font-weight: 600; }
-.choose-item :deep(.iconify) { color: #FFC402 !important; }
+:deep(.el-menu-item.is-active .iconify) { color: #ff5b2e; }
+.choose-item { background: rgba(255, 91, 46, 0.14) !important; color: #ff5b2e !important; font-weight: 600; }
+.choose-item :deep(.iconify) { color: #ff5b2e !important; }
 .manage-title {
   margin: 18px 8px 8px; padding: 0 12px; font-size: 11px; font-weight: 700;
   letter-spacing: 0.08em; text-transform: uppercase; color: #64748B;
 }
 .scroll {
-  background: #0B1430 !important;
+  background: #0a0a0a !important;
   border-right: 1px solid rgba(255, 255, 255, 0.06);
   height: 100%;
   min-height: 100%;
@@ -112,12 +112,12 @@ const route = useRoute();
 }
 :deep(.el-scrollbar__wrap),
 :deep(.el-scrollbar__view) {
-  background: #0B1430 !important;
+  background: #0a0a0a !important;
   min-height: 100%;
 }
 :deep(.el-menu-item.is-active),
 :deep(.el-menu-item.choose-item) {
-  background: rgba(255, 196, 2, 0.14) !important;
-  color: #FFC402 !important;
+  background: rgba(255, 91, 46, 0.14) !important;
+  color: #ff5b2e !important;
 }
 </style>

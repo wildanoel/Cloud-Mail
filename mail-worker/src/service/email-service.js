@@ -168,6 +168,14 @@ const emailService = {
 			attachments
 		} = params;
 
+		if (!accountId || !Array.isArray(receiveEmail) || receiveEmail.length === 0) {
+			throw new BizError(t('sendParamError'), 400);
+		}
+
+		if (!Array.isArray(attachments)) {
+			attachments = [];
+		}
+
 		const { resendTokens, r2Domain, send, domainList, emailProvider } = await settingService.query(c);
 
 		let { imageDataList, html } = await attService.toImageUrlHtml(c, content);

@@ -112,19 +112,19 @@ button, input, select, textarea {
    Navy + amber accent, cool canvas, denser chrome
    ========================================================= */
 :root {
-    --brand-navy: #172554;
-    --brand-navy-deep: #0B1430;
-    --brand-navy-mid: #1e3a8a;
-    --brand-amber: #FFC402;
+    --brand-navy: #0a0a0a;
+    --brand-navy-deep: #0a0a0a;
+    --brand-navy-mid: #262626;
+    --brand-amber: #ff5b2e;
     --brand-amber-soft: #FFF4C2;
     --brand-ink: #0F172A;
     --brand-muted: #64748B;
     --brand-line: #E2E8F0;
-    --app-canvas: #EEF2F8;
+    --app-canvas: #f7f7f7;
     --app-surface: #FFFFFF;
-    --app-sidebar: #0B1430;
+    --app-sidebar: #0a0a0a;
     --app-sidebar-text: #CBD5E1;
-    --app-sidebar-active: rgba(255, 196, 2, 0.14);
+    --app-sidebar-active: rgba(255, 91, 46, 0.14);
     --app-sidebar-hover: rgba(255, 255, 255, 0.06);
     --app-radius: 16px;
     --app-radius-sm: 12px;
@@ -132,19 +132,19 @@ button, input, select, textarea {
     --app-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
     --app-shadow-soft: 0 4px 16px rgba(15, 23, 42, 0.04);
 
-    --el-color-primary: #172554;
-    --el-color-primary-dark-2: #0f1a3d;
-    --el-color-primary-light-3: #1e3a8a;
-    --el-color-primary-light-5: #2e4ba0;
-    --el-color-primary-light-7: #4c6cb8;
-    --el-color-primary-light-8: #6b85c5;
-    --el-color-primary-light-9: #8b9dd2;
+    --el-color-primary: #ff5b2e;
+    --el-color-primary-dark-2: #e04a20;
+    --el-color-primary-light-3: #ff7d58;
+    --el-color-primary-light-5: #ff9a7e;
+    --el-color-primary-light-7: #ffbca8;
+    --el-color-primary-light-8: #ffd0c2;
+    --el-color-primary-light-9: #ffe4dc;
 
     --extra-light-fill: #F8FAFC;
     --light-ill: #F1F5F9;
     --light-border: #E2E8F0;
     --header-actions-border: inset 0 -1px 0 0 #E2E8F0;
-    --aside-backgound: #0B1430;
+    --aside-backgound: #0a0a0a;
     --loadding-background: rgba(238, 242, 248, 0.92);
     --dark-border: #CBD5E1;
     --base-fill: #F1F5F9;
@@ -157,7 +157,7 @@ button, input, select, textarea {
     --email-hover-background: #F8FAFC;
     --login-border: #E2E8F0;
     --form-desc-color: #64748B;
-    --login-switch-color: #172554;
+    --login-switch-color: #ff5b2e;
     --scrollbar-track-color: #E2E8F0;
     --base-border-color: #E2E8F0;
     --secondary-text-color: #94A3B8;
@@ -172,9 +172,9 @@ button, input, select, textarea {
 .dark {
     --app-canvas: #070B16;
     --app-surface: #0F172A;
-    --app-sidebar: #050914;
+    --app-sidebar: #0a0a0a;
     --app-sidebar-text: #94A3B8;
-    --app-sidebar-active: rgba(255, 196, 2, 0.12);
+    --app-sidebar-active: rgba(255, 91, 46, 0.12);
     --app-sidebar-hover: rgba(255, 255, 255, 0.05);
     --app-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     --app-shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.25);
@@ -182,7 +182,7 @@ button, input, select, textarea {
     --extra-light-fill: #111827;
     --light-ill: #111827;
     --light-border: #1F2937;
-    --aside-backgound: #050914;
+    --aside-backgound: #0a0a0a;
     --header-actions-border: inset 0 -1px 0 0 #1F2937;
     --loadding-background: rgba(7, 11, 22, 0.85);
     --dark-border: #334155;
@@ -195,7 +195,7 @@ button, input, select, textarea {
     --email-hover-background: #111827;
     --login-border: none;
     --form-desc-color: #94A3B8;
-    --login-switch-color: #FBBF24;
+    --login-switch-color: #ff5b2e;
     --scrollbar-track-color: #334155;
     --base-border-color: #1F2937;
     --secondary-text-color: #94A3B8;
