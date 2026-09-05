@@ -7,6 +7,7 @@ import userService from '../service/user-service';
 import permService from '../service/perm-service';
 import { t } from '../i18n/i18n'
 import app from '../hono/hono';
+import { getCookie } from 'hono/cookie';
 
 const exclude = [
 	'/login',
@@ -112,7 +113,10 @@ app.use('*', async (c, next) => {
 	}
 
 
-	const jwt = c.req.header(constant.TOKEN_HEADER);
+	// SECURITY (bounty finding #5): prefer the httpOnly cookie (not readable by
+	// JS, so a future XSS cannot steal it). Fall back to the Authorization header
+	// for non-browser clients (API keys / external integrations).
+	const jwt = getCookie(c, constant.TOKEN_COOKIE) || c.req.header(constant.TOKEN_HEADER);
 
 	const result = await jwtUtils.verifyToken(c, jwt);
 

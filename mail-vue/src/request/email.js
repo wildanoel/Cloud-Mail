@@ -13,9 +13,8 @@ export function emailPermanentDelete(emailIds) {
 }
 
 export function emailExport(emailId) {
-    const token = localStorage.getItem('token')
     return fetch(`${import.meta.env.VITE_BASE_URL}/email/export?emailId=${emailId}`, {
-        headers: { 'Authorization': token }
+        credentials: 'include'
     }).then(r => {
         if (!r.ok) throw new Error('Export failed')
         return r.blob()
@@ -23,9 +22,8 @@ export function emailExport(emailId) {
 }
 
 export function emailBatchExport(emailIds) {
-    const token = localStorage.getItem('token')
     return fetch(`${import.meta.env.VITE_BASE_URL}/email/batchExport?emailIds=${emailIds}`, {
-        headers: { 'Authorization': token }
+        credentials: 'include'
     }).then(r => {
         if (!r.ok) throw new Error('Export failed')
         return r.blob()

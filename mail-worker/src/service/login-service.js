@@ -297,11 +297,19 @@ const loginService = {
 	},
 
 	async logout(c, userId) {
-		const token =userContext.getToken(c);
+		const token = await userContext.getToken(c);
 		const authInfo = await c.env.kv.get(KvConst.AUTH_INFO + userId, { type: 'json' });
+		if (!authInfo || !token) {
+			return;
+		}
 		const index = authInfo.tokens.findIndex(item => item === token);
-		authInfo.tokens.splice(index, 1);
-		await c.env.kv.put(KvConst.AUTH_INFO + userId, JSON.stringify(authInfo));
+		// Only splice when the current session token is actually found. A missing
+		// token (index === -1) previously removed the LAST element, invalidating a
+		// different, still-valid session (bounty: broken logout invalidation).
+		if (index > -1) {
+			authInfo.tokens.splice(index, 1);
+			await c.env.kv.put(KvConst.AUTH_INFO + userId, JSON.stringify(authInfo));
+		}
 	}
 
 };

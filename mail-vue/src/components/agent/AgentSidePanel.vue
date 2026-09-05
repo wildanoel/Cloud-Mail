@@ -20,10 +20,8 @@ const input = ref('');
 const transport = new DefaultChatTransport({
   api: '/api/agent/chat',
   fetch: (url, init) => {
-    const headers = new Headers(init?.headers || {});
-    const token = localStorage.getItem('token');
-    if (token) headers.set('Authorization', token);
-    return fetch(url, { ...init, headers });
+    // JWT travels via the httpOnly cookie (same-origin); include credentials.
+    return fetch(url, { ...init, credentials: 'include' });
   },
 });
 

@@ -96,7 +96,7 @@ router.beforeEach((to, from, next) => {
         NProgress.start()
     }, first ? 200 : 100)
 
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('auth')
 
     if (!token && to.name !== 'login') {
         return next({name: 'login'})

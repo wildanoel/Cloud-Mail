@@ -14,7 +14,7 @@ export async function init() {
     const userStore = useUserStore();
     const accountStore = useAccountStore();
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('auth');
     // Never allow Chinese. Only en/id are supported.
     const allowed = new Set(['en', 'id'])
     if (!allowed.has(settingStore.lang)) {

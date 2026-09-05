@@ -136,14 +136,32 @@ const background = computed(() => settingStore.settings.background ? {
 function linuxDoLogin() {
   const clientId = settingStore.settings.linuxdoClientId
   const redirectUri = encodeURIComponent(settingStore.settings.linuxdoCallbackUrl)
-  window.location.href = `https://connect.linux.do/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=openid+profile+email`
+  // SECURITY (bounty finding #1): generate a random OAuth `state` and persist it
+  // so the callback can prove the response belongs to a flow this browser started.
+  // Without it an attacker can feed the victim an authorization code of their
+  // choosing (login CSRF / session fixation).
+  const state = (crypto.randomUUID && crypto.randomUUID()) ||
+    ([...crypto.getRandomValues(new Uint8Array(16))].map(b => b.toString(16).padStart(2, '0')).join(''))
+  sessionStorage.setItem('oauth_state', state)
+  window.location.href = `https://connect.linux.do/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=openid+profile+email&state=${encodeURIComponent(state)}`
 }
 
 onMounted(async () => { await linuxDoGetUser() })
 
 async function linuxDoGetUser() {
-  const code = new URLSearchParams(window.location.search).get('code')
+  const params = new URLSearchParams(window.location.search)
+  const code = params.get('code')
   if (code) {
+    // Verify the state parameter round-trips. Reject mismatches (CSRF).
+    const returnedState = params.get('state')
+    const savedState = sessionStorage.getItem('oauth_state')
+    sessionStorage.removeItem('oauth_state')
+    if (!savedState || returnedState !== savedState) {
+      const cleanUrl = window.location.origin + window.location.pathname
+      window.history.replaceState({}, '', cleanUrl)
+      ElMessage({ message: 'OAuth verification failed. Please try signing in again.', type: 'error', duration: 4000, plain: true })
+      return
+    }
     oauthLoading.value = true
     oauthLinuxDoLogin(code).then(res => {
       bindForm.oauthUserId = res.userInfo.oauthUserId
@@ -220,7 +238,10 @@ async function doRegister() {
 }
 
 async function saveToken(token) {
-  localStorage.setItem('token', token)
+  // SECURITY (bounty finding #5): the JWT is now delivered as an httpOnly cookie
+  // by the server and is intentionally NOT stored in JS-readable storage. We keep
+  // a non-sensitive boolean flag purely for client-side route gating.
+  localStorage.setItem('auth', '1')
   const res = await getLoginUserInfo()
   accountStore.currentAccountId = res.account.accountId
   accountStore.currentAccount = res.account
