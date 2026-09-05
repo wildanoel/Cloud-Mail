@@ -6,6 +6,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
+import DOMPurify from 'dompurify'
 
 const props = defineProps({
   html: {
@@ -13,6 +14,21 @@ const props = defineProps({
     required: true
   }
 })
+
+// SECURITY (bounty stored-XSS): email bodies are attacker-controlled HTML.
+// A Shadow DOM does NOT sandbox script execution — inline event handlers
+// (onerror/onload/onclick), <script>, and javascript: URLs still fire and can
+// read the JWT from localStorage. All email HTML must be sanitised with
+// DOMPurify before it ever touches innerHTML.
+function sanitizeEmailHtml(dirty) {
+  return DOMPurify.sanitize(dirty, {
+    FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'base'],
+    FORBID_ATTR: ['formaction', 'srcdoc'],
+    // Block javascript:/data: (except images) etc. at the URI level.
+    ALLOW_UNKNOWN_PROTOCOLS: false,
+    // DOMPurify strips all on* handler attributes by default.
+  })
+}
 
 const container = ref(null)
 const contentBox = ref(null)
@@ -25,7 +41,7 @@ function updateContent() {
   const bodyStyleMatch = props.html.match(bodyStyleRegex);
   const bodyStyle = bodyStyleMatch ? bodyStyleMatch[1] : '';
 
-  const cleanedHtml = props.html.replace(/<\/?body[^>]*>/gi, '');
+  const cleanedHtml = sanitizeEmailHtml(props.html.replace(/<\/?body[^>]*>/gi, ''));
 
   shadowRoot.innerHTML = `
     <style>

@@ -5,14 +5,41 @@ import { eq, inArray } from 'drizzle-orm';
 import userService from "./user-service";
 import loginService from "./login-service";
 import cryptoUtils from "../utils/crypto-utils";
+import KvConst from "../const/kv-const";
+import { t } from "../i18n/i18n.js";
+import { v4 as uuidv4 } from 'uuid';
 
 const oauthService = {
 
 	async bindUser(c, params) {
 
-		const { email, oauthUserId, code } = params;
+		const { email, oauthUserId, code, bindTicket } = params;
+
+		// SECURITY (bounty finding #3): this endpoint has no auth middleware
+		// (it lives under the /oauth exclude prefix). Previously any client could
+		// PUT an arbitrary {email, oauthUserId} and mint a mailbox + JWT, since the
+		// oauthUserId was fully attacker-controlled. We now require a one-time
+		// bind ticket that is issued only by linuxDoLogin() after a real upstream
+		// OAuth round, is bound to that exact oauthUserId, and expires in 5 minutes.
+		if (!bindTicket) {
+			throw new BizError(t('authExpired'), 401);
+		}
+
+		const ticketKey = KvConst.OAUTH_BIND_TICKET + oauthUserId;
+		const savedTicket = await c.env.kv.get(ticketKey);
+
+		if (!savedTicket || savedTicket !== bindTicket) {
+			throw new BizError(t('authExpired'), 401);
+		}
+
+		// One-time use: consume the ticket immediately so it cannot be replayed.
+		await c.env.kv.delete(ticketKey);
 
 		const oauthRow = await this.getById(c, oauthUserId);
+
+		if (!oauthRow) {
+			throw new BizError(t('authExpired'), 401);
+		}
 
 		let userRow = await userService.selectByIdIncludeDel(c, oauthRow.userId);
 
@@ -78,7 +105,17 @@ const oauthService = {
 		const userRow = await userService.selectByIdIncludeDel(c, oauthRow.userId);
 
 		if (!userRow) {
-			return { userInfo: oauthRow, token: null }
+			// Account not yet bound. Issue a one-time, short-lived bind ticket tied
+			// to THIS oauthUserId from THIS completed OAuth round. bindUser() requires
+			// it, which prevents an attacker from binding an arbitrary email to an
+			// oauthUserId they never authenticated as (bounty finding #3).
+			const bindTicket = uuidv4();
+			await c.env.kv.put(
+				KvConst.OAUTH_BIND_TICKET + oauthRow.oauthUserId,
+				bindTicket,
+				{ expirationTtl: 300 }
+			);
+			return { userInfo: oauthRow, token: null, bindTicket }
 		}
 
 		const JwtToken = await loginService.login(c, { email: userRow.email, password: null }, true);

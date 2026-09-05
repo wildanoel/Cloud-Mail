@@ -119,7 +119,7 @@ const bindDialog = ref(false)
 
 const form = reactive({ email: '', password: '' })
 const registerForm = reactive({ email: '', password: '', confirmPassword: '', code: '' })
-const bindForm = reactive({ email: '', oauthUserId: '', code: '' })
+const bindForm = reactive({ email: '', oauthUserId: '', code: '', bindTicket: '' })
 
 const suffix = ref('')
 const domainList = settingStore.domainList
@@ -147,6 +147,7 @@ async function linuxDoGetUser() {
     oauthLoading.value = true
     oauthLinuxDoLogin(code).then(res => {
       bindForm.oauthUserId = res.userInfo.oauthUserId
+      bindForm.bindTicket = res.bindTicket || ''
       if (!res.token) {
         bindDialog.value = true
         oauthLoading.value = false
@@ -173,7 +174,7 @@ function doBind() {
     ElMessage({ message: t('emptyRegKeyMsg'), type: 'error', plain: true }); return
   }
   bindLoading.value = true
-  oauthBindUser({ email: fullEmail, oauthUserId: bindForm.oauthUserId, code: bindForm.code }).then(res => {
+  oauthBindUser({ email: fullEmail, oauthUserId: bindForm.oauthUserId, code: bindForm.code, bindTicket: bindForm.bindTicket }).then(res => {
     saveToken(res.token)
   }).catch(() => { bindLoading.value = false })
 }

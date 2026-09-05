@@ -92,15 +92,20 @@ app.use('/login', async (c, next) => {
 app.onError((err, c) => {
 	if (err.name === 'BizError') {
 		console.log(err.message);
-	} else {
-		console.error(err);
+		// BizError messages are intentional, user-facing, and safe to return.
+		return c.json(result.fail(err.message, err.code));
 	}
 
-	if (err.message === `Cannot read properties of undefined (reading 'get')`) {
-		return c.json(result.fail('KV database not bound', 502));
-	}
+	// Non-BizError (unexpected runtime exceptions). Log the full detail
+	// server-side but NEVER echo the raw message to the client — doing so leaked
+	// backend internals (D1/Workers stack, field names) and let an attacker probe
+	// endpoint behaviour via error strings (bounty finding #4).
+	console.error(err);
 
-	if (err.message === `Cannot read properties of undefined (reading 'put')`) {
+	// Keep the operational database-binding hints (deployment diagnostics only,
+	// they reveal no request-specific data).
+	if (err.message === `Cannot read properties of undefined (reading 'get')`
+		|| err.message === `Cannot read properties of undefined (reading 'put')`) {
 		return c.json(result.fail('KV database not bound', 502));
 	}
 
@@ -108,7 +113,7 @@ app.onError((err, c) => {
 		return c.json(result.fail('D1 database not bound', 502));
 	}
 
-	return c.json(result.fail(err.message, err.code));
+	return c.json(result.fail('Internal server error', 500));
 });
 
 export default app;

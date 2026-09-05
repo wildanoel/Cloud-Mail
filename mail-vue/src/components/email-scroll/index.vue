@@ -234,6 +234,7 @@
 
 <script setup>
 import {Icon} from "@iconify/vue";
+import DOMPurify from "dompurify";
 import skeletonBlock from "@/components/email-scroll/skeleton/index.vue"
 import {computed, onActivated, reactive, ref, watch, nextTick, onMounted, onUnmounted } from "vue";
 import {useEmailStore} from "@/store/email.js";
@@ -555,12 +556,15 @@ function htmlToText(email) {
 
     const tempDiv = document.createElement('div');
 
-    tempDiv.innerHTML = email.content.replace(
-        /<(img|iframe|object|embed|video|audio|source|link)[^>]*>/gi, ''
-    );
+    // SECURITY (bounty stored-XSS): build the preview text from sanitised HTML.
+    // The previous regex-only strip still let <svg onload>, <body onload>, etc.
+    // execute when assigned to innerHTML. DOMPurify neutralises all handlers and
+    // scripts before we ever read textContent.
+    tempDiv.innerHTML = DOMPurify.sanitize(email.content, {
+      FORBID_TAGS: ['script', 'style', 'title', 'img', 'iframe', 'object', 'embed', 'video', 'audio', 'source', 'link'],
+      ALLOW_UNKNOWN_PROTOCOLS: false,
+    });
 
-    const scriptsAndStyles = tempDiv.querySelectorAll('script, style, title');
-    scriptsAndStyles.forEach(el => el.remove());
     let text = tempDiv.textContent || tempDiv.innerText || '';
     text = text.replace(/\s+/g, ' ').trim();
     return cleanSpace(text)

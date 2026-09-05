@@ -28,9 +28,14 @@ const loginService = {
 
 		let { regKey, register, registerVerify, regVerifyCount, minEmailPrefix, emailPrefixFilter } = await settingService.query(c)
 
+		// OAuth users authenticated via the upstream provider (linux.do) do not
+		// possess a Turnstile token, so skip the register-verify challenge for them.
+		// SECURITY (bounty finding #2): do NOT force register=OPEN here — that
+		// silently bypassed the admin's register=CLOSE policy and, combined with the
+		// unauthenticated bindUser endpoint, enabled unauthenticated mass account
+		// creation. The admin's register policy is now honoured for OAuth too.
 		if (oauth) {
 			registerVerify = settingConst.registerVerify.CLOSE;
-			register = settingConst.register.OPEN;
 		}
 
 		if (register === settingConst.register.CLOSE) {
