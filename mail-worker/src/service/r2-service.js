@@ -44,6 +44,35 @@ const r2Service = {
 		return await c.env.r2.get(key);
 	},
 
+	// Serve a stored object as an HTTP Response, reading from whichever backend
+	// actually holds it. BUGFIX: the /attachments/ and /static/ routes previously
+	// always read from KV, so when storage was R2 (or S3) downloads returned an
+	// empty 0-byte body ("Menerima data..." hangs). Dispatch on storageType so
+	// the read backend matches the write backend used in putObj().
+	async toObjResp(c, key) {
+
+		const storageType = await this.storageType(c);
+
+		if (storageType === 'R2') {
+			const obj = await c.env.r2.get(key);
+			if (!obj) {
+				return new Response(null, { status: 404 });
+			}
+			const headers = new Headers();
+			obj.writeHttpMetadata(headers);
+			headers.set('Content-Length', obj.size);
+			if (!headers.has('Content-Type')) {
+				headers.set('Content-Type', 'application/octet-stream');
+			}
+			return new Response(obj.body, { headers });
+		}
+
+		// S3-backed objects are served directly from their public/OSS domain by
+		// the frontend, so the /attachments/ worker route is only hit for R2/KV.
+		// Fall back to KV for anything else to preserve the original behaviour.
+		return await kvObjService.toObjResp(c, key);
+	},
+
 	async delete(c, key) {
 
 		const storageType = await this.storageType(c);
