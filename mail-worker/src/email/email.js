@@ -6,6 +6,7 @@ import attService from '../service/att-service';
 import constant from '../const/constant';
 import fileUtils from '../utils/file-utils';
 import { emailConst, isDel, settingConst } from '../const/entity-const';
+import { parseOwnDomains, checkOwnDomainSpoof } from './spf-guard';
 import emailUtils from '../utils/email-utils';
 import roleService from '../service/role-service';
 import userService from '../service/user-service';
@@ -43,6 +44,21 @@ export async function email(message, env, ctx) {
 		}
 
 		const email = await PostalMime.parse(content);
+
+		// SECURITY: reject forged senders claiming our own mail domains.
+		// Cloudflare Email Routing does not enforce SPF on inbound, so without
+		// this check any host can deliver "billing@<our-domain>" into user
+		// mailboxes (phishing surface). Fail-open on missing verdicts.
+		const { reject: spoofReject, reason: spoofReason } = await checkOwnDomainSpoof(
+			email.from && email.from.address,
+			content,
+			parseOwnDomains(env.domain)
+		);
+		if (spoofReject) {
+			message.setReject('Unauthenticated sender claiming local domain');
+			console.warn(`spf-guard reject: ${email.from?.address} (${spoofReason})`);
+			return;
+		}
 
 		const account = await accountService.selectByEmailIncludeDel({ env: env }, message.to);
 
